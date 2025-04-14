@@ -7,8 +7,12 @@ from nltk.sentiment.vader import SentimentIntensityAnalyzer
 # Download NLTK data for sentiment analysis
 try:
     nltk.data.find('vader_lexicon')
-except LookupError:
-    nltk.download('vader_lexicon', quiet=True)
+except (LookupError, ImportError, FileNotFoundError):
+    try:
+        nltk.download('vader_lexicon', quiet=True)
+    except Exception as e:
+        st.warning(f"Could not download NLTK data: {str(e)}")
+        # Fall back to simple regex-based sentiment analysis if NLTK fails
 
 def analyze_sentiment(news_items):
     """
@@ -48,8 +52,23 @@ def analyze_sentiment(news_items):
             sentiment_scores.append(scores['compound'])
             
         except Exception as e:
-            print(f"Error analyzing sentiment for: {item.get('title', 'N/A')}: {e}")
-            sentiment_scores.append(0)  # Neutral if error
+            # Fallback to simple word-based sentiment analysis
+            title = item.get('title', '').lower()
+            
+            positive_words = ['rise', 'growth', 'increase', 'improvement', 'gain', 'profit', 'success', 'innovation', 
+                              'launch', 'higher', 'record', 'strong', 'exceed', 'positive', 'up', 'opportunity']
+            negative_words = ['down', 'fall', 'drop', 'loss', 'decline', 'concern', 'risk', 'fear', 'problem', 
+                              'issue', 'lower', 'miss', 'negative', 'fail', 'weak', 'threat', 'challenge']
+            
+            pos_count = sum(1 for word in positive_words if word in title)
+            neg_count = sum(1 for word in negative_words if word in title)
+            
+            if pos_count > neg_count:
+                sentiment_scores.append(0.5)  # Positive
+            elif neg_count > pos_count:
+                sentiment_scores.append(-0.5)  # Negative
+            else:
+                sentiment_scores.append(0)  # Neutral
     
     return sentiment_scores
 
