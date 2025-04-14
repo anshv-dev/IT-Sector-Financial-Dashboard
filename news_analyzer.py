@@ -149,7 +149,7 @@ def display_news(news_items, sentiment_scores):
                                 description = description[:297] + "..."
                             st.markdown(description)
                         
-                        # Link to full article
-                        st.markdown(f"[Read full article]({url})", unsafe_allow_html=True)
+                        # Link to full article - use HTML directly to ensure it opens in a new tab
+                        st.markdown(f"<a href='{url}' target='_blank'>Read full article</a>", unsafe_allow_html=True)
                         
                         st.markdown("---")
