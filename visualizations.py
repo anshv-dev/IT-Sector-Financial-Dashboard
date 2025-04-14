@@ -26,9 +26,11 @@ def plot_stock_performance(stock_df, selected_companies):
         return fig
     
     # Create mapping from symbol to company name
-    symbol_to_company = {v: k for k, v in {company: stock_df[stock_df['Symbol'] == IT_COMPANIES[company]]['Symbol'].iloc[0] 
-                        for company in selected_companies 
-                        if not stock_df[stock_df['Symbol'] == IT_COMPANIES[company]].empty}.items()}
+    symbol_to_company = {}
+    for company in selected_companies:
+        symbol = IT_COMPANIES[company]
+        if not stock_df[stock_df['Symbol'] == symbol].empty:
+            symbol_to_company[symbol] = company
     
     # Create figure
     fig = px.line(

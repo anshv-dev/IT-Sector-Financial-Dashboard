@@ -12,7 +12,8 @@ except LookupError:
 
 def analyze_sentiment(news_items):
     """
-    Analyze sentiment of news headlines using NLTK's VADER sentiment analyzer.
+    Analyze sentiment of news headlines, either using pre-computed sentiment
+    or using NLTK's VADER sentiment analyzer.
     
     Args:
         news_items (list): List of news dictionaries containing titles
@@ -20,18 +21,19 @@ def analyze_sentiment(news_items):
     Returns:
         list: List of sentiment scores (-1 to 1) corresponding to each headline
     """
-    # Initialize the sentiment analyzer
-    try:
-        sid = SentimentIntensityAnalyzer()
-    except Exception as e:
-        print(f"Error initializing sentiment analyzer: {e}")
-        # Return neutral scores if analyzer fails
-        return [0] * len(news_items)
-    
     sentiment_scores = []
     
     for item in news_items:
+        # Check if the news item already has a sentiment score
+        if "sentiment" in item:
+            sentiment_scores.append(item["sentiment"])
+            continue
+            
+        # Otherwise, try to analyze the sentiment using NLTK
         try:
+            # Initialize the sentiment analyzer
+            sid = SentimentIntensityAnalyzer()
+            
             title = item.get('title', '')
             
             # Skip if title is empty
