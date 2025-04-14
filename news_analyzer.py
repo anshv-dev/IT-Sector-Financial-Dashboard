@@ -150,6 +150,6 @@ def display_news(news_items, sentiment_scores):
                             st.markdown(description)
                         
                         # Link to full article
-                        st.markdown(f"[Read full article]({url})")
+                        st.markdown(f"[Read full article]({url})", unsafe_allow_html=True)
                         
                         st.markdown("---")

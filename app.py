@@ -164,10 +164,11 @@ else:
                 col1, col2 = st.columns(2)
                 
                 for i, (currency, rate) in enumerate(latest_rates.items()):
+                    rate_display = f"{float(rate):.4f}" if rate != "N/A" else "N/A"
                     if i % 2 == 0:
-                        col1.metric(f"{currency}/{base_currency}", f"{rate:.4f}")
+                        col1.metric(f"{currency}/{base_currency}", rate_display)
                     else:
-                        col2.metric(f"{currency}/{base_currency}", f"{rate:.4f}")
+                        col2.metric(f"{currency}/{base_currency}", rate_display)
             
             except Exception as e:
                 st.error(f"Error loading exchange rate data: {str(e)}")
