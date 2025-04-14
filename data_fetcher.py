@@ -192,6 +192,10 @@ def get_exchange_rates(base_currency, target_currencies, start_date, end_date):
     if date_range and date_range[-1] != end_date and end_date.weekday() < 5:
         date_range.append(end_date)
     
+    # If no dates in range, add at least one date to prevent empty dataframe
+    if not date_range:
+        date_range.append(end_date)
+    
     # Base exchange rates (approximate values as of April 2023)
     base_rates = {
         'USD': {'EUR': 0.92, 'GBP': 0.80, 'JPY': 134.0, 'CAD': 1.35, 'AUD': 1.49, 'CNY': 6.89, 'INR': 82.0},
@@ -360,7 +364,7 @@ def get_it_sector_news(company_names, limit=20):
                     "title": template["title"],
                     "description": template["desc"],
                     "source": {"name": f"Tech {['News', 'Daily', 'Insider', 'Report', 'Chronicle'][i % 5]}"},
-                    "url": "https://tech-news-example.com/article",
+                    "url": "https://techcrunch.com",
                     "publishedAt": news_date.strftime("%Y-%m-%d %H:%M"),
                     "urlToImage": None,
                     "sentiment": 0.2 if "growth" in template["desc"] or "new" in template["title"] else 
@@ -374,7 +378,7 @@ def get_it_sector_news(company_names, limit=20):
             "title": template["title"],
             "description": template["desc"],
             "source": {"name": f"Tech {['Journal', 'Times', 'Review', 'Weekly', 'Today'][i % 5]}"},
-            "url": "https://tech-news-example.com/article",
+            "url": "https://techcrunch.com",
             "publishedAt": news_date.strftime("%Y-%m-%d %H:%M"),
             "urlToImage": None,
             "sentiment": 0.2 if "growth" in template["desc"] or "increase" in template["desc"] else 
