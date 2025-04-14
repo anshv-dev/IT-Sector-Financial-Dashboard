@@ -2,6 +2,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import pandas as pd
+from data_fetcher import IT_COMPANIES
 
 def plot_stock_performance(stock_df, selected_companies):
     """
@@ -164,7 +165,6 @@ def create_stock_comparison(stock_df, selected_companies):
         return fig
     
     # Create symbol to company name mapping for later use
-    from data_fetcher import IT_COMPANIES
     symbol_to_company = {IT_COMPANIES[company]: company for company in selected_companies}
     
     # Create figure
@@ -262,7 +262,6 @@ def create_volume_chart(stock_df, selected_companies):
         return fig
     
     # Create symbol to company name mapping
-    from data_fetcher import IT_COMPANIES
     symbol_to_company = {IT_COMPANIES[company]: company for company in selected_companies}
     
     # Ensure dates are in datetime format
